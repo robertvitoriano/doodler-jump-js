@@ -22,8 +22,8 @@ document.addEventListener('DOMContentLoaded', function () {
     grid.appendChild(doodler);
     doodler.classList.add('doodler');
     doodlerLeftPosition = platforms[0].left
-    doodler.style.left = doodlerLeftPosition + 'px';
     doodlerBottomPosition = platforms[0].bottom + platformHeight;
+    doodler.style.left = doodlerLeftPosition + 'px';
     doodler.style.bottom = doodlerBottomPosition + 'px';
   }
 
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!isGameOver) {
       createPlatforms();
       createDoodler();
-      setInterval(movePlatforms, 20000);
+      setInterval(movePlatforms, 20);
       // handleDoodlerJump();
     }
   }
