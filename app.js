@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const gridHeight = grid.clientHeight;
   const gridWidth = grid.clientWidth;
+  const gameScreenBottomLimit = window.innerHeight - gridHeight;
+  const gameScreenTopLimit = gridHeight - doodler.clientHeight;
   const platformWidth = 15;
   const platforms = []
 
@@ -11,6 +13,8 @@ document.addEventListener('DOMContentLoaded', function () {
   let doodlerBottomPosition = 150;
   let isGameOver = false;
   let platformCount = 5;
+  let upDoodlerSetInterval;
+  let downDoodlerSetInterval;
 
 
   function createDoodler() {
@@ -23,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
   class Platform {
     constructor(newPlataformBottomPosition) {
       this.bottom = newPlataformBottomPosition;
-      this.left = Math.floor(Math.random() * (gridWidth - gridWidth/platformCount));
+      this.left = Math.floor(Math.random() * (gridWidth - gridWidth / platformCount));
       this.visual = document.createElement('div');
 
       const visual = this.visual;
@@ -46,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function movePlatforms() {
-    if(doodlerBottomPosition > 150){
+    if (doodlerBottomPosition > 200) {
       platforms.forEach(platform => {
         platform.bottom -= 4;
         platform.visual.style.bottom = platform.bottom + 'px';
@@ -54,14 +58,44 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  function handleDoodlerJump() {
+    clearInterval(downDoodlerSetInterval);
+    upDoodlerSetInterval = setInterval(() => {
+      doodlerBottomPosition += 8;
+      doodler.style.bottom = doodlerBottomPosition + 'px';
+      if (doodlerBottomPosition >= 350) {
+        handleDoodlerFall();
+      }
+    }, 30)
+  }
+
+  function handleDoodlerFall() {
+    clearInterval(upDoodlerSetInterval);
+    downDoodlerSetInterval = setInterval(() => {
+      doodlerBottomPosition -= 8;
+      doodler.style.bottom = doodlerBottomPosition + 'px';
+      if (doodlerBottomPosition <= 0) {
+        gameOver();
+        doodler.style.bottom = 0 + 'px';
+      }
+    }, 30);
+  }
+
+  function gameOver() {
+    isGameOver = true;
+    doodler.classList.add('doodler-dead');
+    doodler.style.bottom = gameScreenBottomLimit + 'px';
+    console.log('Game Over');
+    clearInterval(downDoodlerSetInterval);
+  }
+
+
   function start() {
     if (!isGameOver) {
       createDoodler();
       createPlatforms();
-
-      setInterval(function () {
-        movePlatforms();
-      }, 20);
+      setInterval(movePlatforms, 20);
+      handleDoodlerJump();
     }
   }
   // TODO - ATTACH BUTTON
