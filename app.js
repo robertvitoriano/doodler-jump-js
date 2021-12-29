@@ -46,13 +46,10 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function movePlatforms() {
-    if(doodlerBottomPosition >200){
+    if(doodlerBottomPosition > 150){
       platforms.forEach(platform => {
-        platform.visual.style.left = platform.left + 'px';
-        platform.left -= 1;
-        if(platform.left < 0){
-          platform.left = gridWidth;
-        }
+        platform.bottom -= 4;
+        platform.visual.style.bottom = platform.bottom + 'px';
       });
     }
   }
