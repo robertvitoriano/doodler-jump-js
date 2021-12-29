@@ -63,19 +63,14 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function handleDoodlerJump() {
-    addEventListener('keydown', (e) => {
-      if (e.key = "ArrowUp" && doodlerBottomPosition > 0) {
-        clearInterval(downDoodlerSetInterval);
-        upDoodlerSetInterval = setInterval(() => {
-          doodlerBottomPosition += 8;
-          doodler.style.bottom = doodlerBottomPosition + 'px';
-          if (doodlerBottomPosition >= 350) {
-            handleDoodlerFall();
-          }
-        }, 30)
+    clearInterval(downDoodlerSetInterval);
+    upDoodlerSetInterval = setInterval(() => {
+      doodlerBottomPosition += 8;
+      doodler.style.bottom = doodlerBottomPosition + 'px';
+      if (doodlerBottomPosition >= 350) {
+        handleDoodlerFall();
       }
-
-    })
+    }, 30)
   }
 
   function handleDoodlerFall() {
@@ -99,12 +94,30 @@ document.addEventListener('DOMContentLoaded', function () {
     clearInterval(downDoodlerSetInterval);
   }
 
+  function handleDoodleMoments(e) {
+    switch (e.key) {
+      case 'ArrowUp':
+        handleDoodlerJump();
+        break;
+      case 'ArrowDown':
+        //movedoodleDown();
+        break;
+      case 'ArrowLeft':
+        //movedoodleLeft();
+        break;
+      case 'ArrowRight':
+        //movedoodleRight();
+        break;
+    }
+  }
+
+
   function start() {
     if (!isGameOver) {
       createPlatforms();
       createDoodler();
       setInterval(movePlatforms, 20);
-      handleDoodlerJump();
+      addEventListener("keydown", handleDoodleMoments);
     }
   }
   // TODO - ATTACH BUTTON
