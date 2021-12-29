@@ -7,10 +7,11 @@ document.addEventListener('DOMContentLoaded', function () {
   const gameScreenBottomLimit = window.innerHeight - gridHeight;
   const gameScreenTopLimit = gridHeight - doodler.clientHeight;
   const platformWidth = 15;
+  const platformHeight = 15;
   const platforms = []
 
   let doodlerLeftPosition = 50;
-  let doodlerBottomPosition = 150;
+  let doodlerBottomPosition;
   let isGameOver = false;
   let platformCount = 5;
   let upDoodlerSetInterval;
@@ -20,7 +21,9 @@ document.addEventListener('DOMContentLoaded', function () {
   function createDoodler() {
     grid.appendChild(doodler);
     doodler.classList.add('doodler');
+    doodlerLeftPosition = platforms[0].left
     doodler.style.left = doodlerLeftPosition + 'px';
+    doodlerBottomPosition = platforms[0].bottom + platformHeight;
     doodler.style.bottom = doodlerBottomPosition + 'px';
   }
 
@@ -50,10 +53,11 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function movePlatforms() {
-    if (doodlerBottomPosition > 200) {
-      platforms.forEach(platform => {
-        platform.bottom -= 4;
+    if (doodlerBottomPosition > 0) {
+      platforms.forEach((platform,index) => {
+        platform.bottom -= 1;
         platform.visual.style.bottom = platform.bottom + 'px';
+        
       });
     }
   }
@@ -86,16 +90,16 @@ document.addEventListener('DOMContentLoaded', function () {
     doodler.classList.add('doodler-dead');
     doodler.style.bottom = gameScreenBottomLimit + 'px';
     console.log('Game Over');
+    clearInterval(upDoodlerSetInterval);
     clearInterval(downDoodlerSetInterval);
   }
 
-
   function start() {
     if (!isGameOver) {
-      createDoodler();
       createPlatforms();
-      setInterval(movePlatforms, 20);
-      handleDoodlerJump();
+      createDoodler();
+      setInterval(movePlatforms, 20000);
+      // handleDoodlerJump();
     }
   }
   // TODO - ATTACH BUTTON
