@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
   class Platform {
     constructor(newPlataformBottomPosition) {
       this.bottom = newPlataformBottomPosition;
-      this.left = Math.floor(Math.random() * (gridWidth - platformWidth));
+      this.left = Math.floor(Math.random() * (gridWidth - gridWidth/platformCount));
       this.visual = document.createElement('div');
 
       const visual = this.visual;
