@@ -5,11 +5,13 @@ document.addEventListener('DOMContentLoaded', function () {
   const gridHeight = grid.clientHeight;
   const gridWidth = grid.clientWidth;
   const platformWidth = 15;
+  const platforms = []
 
   let doodlerLeftPosition = 50;
   let doodlerBottomPosition = 150;
   let isGameOver = false;
   let platformCount = 5;
+
 
   function createDoodler() {
     grid.appendChild(doodler);
@@ -38,6 +40,20 @@ document.addEventListener('DOMContentLoaded', function () {
       const platformGap = gridHeight / platformCount;
       const newPlatformBottomPosition = 100 + (platformGap * i);
       const newPlatform = new Platform(newPlatformBottomPosition);
+      platforms.push(newPlatform);
+
+    }
+  }
+
+  function movePlatforms() {
+    if(doodlerBottomPosition >200){
+      platforms.forEach(platform => {
+        platform.visual.style.left = platform.left + 'px';
+        platform.left -= 1;
+        if(platform.left < 0){
+          platform.left = gridWidth;
+        }
+      });
     }
   }
 
@@ -45,6 +61,10 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!isGameOver) {
       createDoodler();
       createPlatforms();
+
+      setInterval(function () {
+        movePlatforms();
+      }, 20);
     }
   }
   // TODO - ATTACH BUTTON
