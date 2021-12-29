@@ -54,23 +54,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function movePlatforms() {
     if (doodlerBottomPosition > 0) {
-      platforms.forEach((platform,index) => {
+      platforms.forEach((platform, index) => {
         platform.bottom -= 1;
         platform.visual.style.bottom = platform.bottom + 'px';
-        
+
       });
     }
   }
 
   function handleDoodlerJump() {
-    clearInterval(downDoodlerSetInterval);
-    upDoodlerSetInterval = setInterval(() => {
-      doodlerBottomPosition += 8;
-      doodler.style.bottom = doodlerBottomPosition + 'px';
-      if (doodlerBottomPosition >= 350) {
-        handleDoodlerFall();
+    addEventListener('keydown', (e) => {
+      if (e.key = "ArrowUp" && doodlerBottomPosition > 0) {
+        clearInterval(downDoodlerSetInterval);
+        upDoodlerSetInterval = setInterval(() => {
+          doodlerBottomPosition += 8;
+          doodler.style.bottom = doodlerBottomPosition + 'px';
+          if (doodlerBottomPosition >= 350) {
+            handleDoodlerFall();
+          }
+        }, 30)
       }
-    }, 30)
+
+    })
   }
 
   function handleDoodlerFall() {
@@ -99,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
       createPlatforms();
       createDoodler();
       setInterval(movePlatforms, 20);
-      // handleDoodlerJump();
+      handleDoodlerJump();
     }
   }
   // TODO - ATTACH BUTTON
