@@ -11,11 +11,17 @@ document.addEventListener('DOMContentLoaded', function () {
   const platforms = []
 
   let doodlerLeftPosition = 50;
-  let doodlerBottomPosition;
+  let startPoint = 150;
+  let doodlerBottomPosition = startPoint;
   let isGameOver = false;
   let platformCount = 5;
   let upDoodlerSetInterval;
   let downDoodlerSetInterval;
+  let leftDoodlerSetInterval;
+  let isJumping = true;
+  let isGoingLeft = false;
+  let isGoingRight = false;
+
 
 
   function createDoodler() {
@@ -64,17 +70,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function handleDoodlerJump() {
     clearInterval(downDoodlerSetInterval);
+    isJumping = true;
     upDoodlerSetInterval = setInterval(() => {
       doodlerBottomPosition += 8;
       doodler.style.bottom = doodlerBottomPosition + 'px';
-      if (doodlerBottomPosition >= 350) {
+      if (doodlerBottomPosition > startPoint + 200) {
         handleDoodlerFall();
       }
     }, 30)
   }
 
+  function moveDoodlerLeft() {
+
+    isGoingLeft = true;
+    leftDoodlerSetInterval = setInterval(() => {
+      doodlerLeftPosition -= 5;
+      doodler.style.left = doodlerLeftPosition + 'px';
+
+    }, 30)
+
+  }
+
   function handleDoodlerFall() {
     clearInterval(upDoodlerSetInterval);
+    isJumping = false;
     downDoodlerSetInterval = setInterval(() => {
       doodlerBottomPosition -= 8;
       doodler.style.bottom = doodlerBottomPosition + 'px';
@@ -82,6 +101,20 @@ document.addEventListener('DOMContentLoaded', function () {
         gameOver();
         doodler.style.bottom = 0 + 'px';
       }
+
+      platforms.forEach((platform, index) => {
+        if (
+          (doodlerBottomPosition >= platform.bottom) &&
+          (doodlerBottomPosition <= platform.bottom + platformHeight) &&
+          (doodlerLeftPosition + doodler.clientWidth >= platform.left) &&
+          (doodlerLeftPosition <= platform.left + platformWidth) &&
+          !isJumping
+        ) {
+          startPoint = doodlerBottomPosition;
+          handleDoodlerJump();
+        }
+      });
+
     }, 30);
   }
 
@@ -103,14 +136,13 @@ document.addEventListener('DOMContentLoaded', function () {
         //movedoodleDown();
         break;
       case 'ArrowLeft':
-        //movedoodleLeft();
+        moveDoodlerLeft();
         break;
       case 'ArrowRight':
         //movedoodleRight();
         break;
     }
   }
-
 
   function start() {
     if (!isGameOver) {
